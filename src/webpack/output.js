@@ -6,11 +6,11 @@ const getPath = name => {
 }
 
 const getLibrary = name => {
-  return 'style'
+  return 'react-hatch'
 }
 
 const getLibraryTarget = name => {
-  return 'commonjs'
+  return 'umd'
 }
 
 const getFilename = name => '[name].js'
