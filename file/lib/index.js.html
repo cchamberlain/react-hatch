@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">lib/index.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/cchamberlain/react-hatch" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  </ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">lib/index.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">//import ReactCSSTransitionGroup from &apos;react/lib/ReactCSSTransitionGroup&apos;
+import { detectBrowser } from &apos;browser-detective&apos;
+import { log } from &apos;../config&apos;
+import &apos;./style&apos;
+
+const validate = ({ assert, classNames, React, ReactCSSTransitionGroup }) =&gt; {
+  if(!assert)
+    throw new Error(&apos;react-hatch requires an assert dependency.&apos;)
+  assert.ok(classNames, &apos;react-hatch requires classNames dependency.&apos;)
+  assert.ok(React, &apos;react-hatch requires React dependency.&apos;)
+  assert.ok(ReactCSSTransitionGroup, &apos;react-hatch requires ReactCSSTransitionGroup dependency.&apos;)
+  return { assert, classNames, React, ReactCSSTransitionGroup }
+}
+
+export default dependencies =&gt; {
+  const { assert, classNames, React, ReactCSSTransitionGroup } = dependencies
+
+  /** @type {JSX} Required to stop autocomplete on chrome. */
+  const ieVersion = getInternetExplorerVersion()
+
+  const hatchBackgroundStyle = { backgroundColor: &apos;#bbb&apos; }
+
+  const HatchLatch = props =&gt; (
+    &lt;span&gt;
+      &lt;div className=&quot;hatch-latch&quot; /&gt;
+      &lt;div className=&quot;hatch-latch hatch-latch-glow&quot; /&gt;
+      &lt;div className=&quot;hatch-latch hatch-latch-error&quot; /&gt;
+      &lt;div className=&quot;hatch-latch hatch-latch-success&quot; /&gt;
+      &lt;div className=&quot;hatch-latch hatch-latch-loading&quot; /&gt;
+    &lt;/span&gt;
+  )
+
+  const HatchToggle = props =&gt; (
+    &lt;div className=&quot;flex flex-center&quot;&gt;
+      &lt;button id=&quot;HatchToggle&quot; className=&quot;btn btn-danger&quot; onClick={props.toggleClose}&gt;
+        Hatch
+      &lt;/button&gt;
+    &lt;/div&gt;
+  )
+
+  class HatchUpper extends Component {
+    componentDidMount() {
+      const { username } = this.props
+      if(this.username &amp;&amp; username)
+        this.username.value = username
+      if(this.password)
+        this.password.value = &apos;&apos;
+    }
+    render() {
+      const { isModern, title, message } = this.props
+      const contentStyle = { maxWidth: 800, alignSelf: &apos;center&apos; }
+
+      return (
+        &lt;div className=&quot;hatch-animate&quot;&gt;
+          &lt;div className=&quot;hatch-inside&quot;  style={hatchBackgroundStyle}&gt;
+            &lt;div className=&quot;hatch-content&quot; style={contentStyle}&gt;
+              {title ? &lt;div className=&quot;hatch-title&quot;&gt;&lt;h1&gt;{title}&lt;/h1&gt;&lt;/div&gt; : null}
+              {message ? &lt;div className=&quot;hatch-message&quot;&gt;&lt;p&gt;{message}&lt;/p&gt;&lt;/div&gt; : null}
+              {this.renderAuthorization()}
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div className=&quot;hatch-edge&quot; style={hatchBackgroundStyle} /&gt;
+          {isModern ? &lt;HatchLatch /&gt; : null}
+          &lt;div className=&quot;hatch-empty&quot; /&gt;
+        &lt;/div&gt;
+      )
+    }
+    renderAuthorization = () =&gt; {
+      const { hasAuthorization, errors } = this.props
+      if(hasAuthorization) {
+        return (
+          &lt;div className=&quot;hatch-form&quot;&gt;
+            &lt;form onSubmit={e =&gt; this.onLoginAttempt(e)}&gt;
+              &lt;div className=&quot;hatch-input&quot;&gt;
+                &lt;input
+                  type=&quot;text&quot;
+                  autoComplete=&quot;off&quot;
+                  name=&quot;username&quot;
+                  placeholder=&quot;Username&quot;
+                  ref={x =&gt; this.username = x}
+                /&gt;
+              &lt;/div&gt;
+              &lt;div className=&quot;hatch-input&quot;&gt;
+                &lt;input
+                  type=&quot;password&quot;
+                  autoComplete=&quot;new-passwords&quot;
+                  name=&quot;password&quot;
+                  placeholder=&quot;Password&quot;
+                  ref={x =&gt; this.password = x}
+                /&gt;
+              &lt;/div&gt;
+              &lt;div className=&quot;hatch-input right&quot;&gt;
+                &lt;button className=&quot;hatch-btn&quot; type=&quot;submit&quot;&gt;Sign In&lt;/button&gt;
+              &lt;/div&gt;
+            &lt;/form&gt;
+            {errors ? errors.map((x, i) =&gt; &lt;span key={i} className=&quot;hatch-error&quot;&gt;{x.message}&lt;/span&gt;) : null}
+          &lt;/div&gt;
+        )
+      }
+    };
+
+    onLoginAttempt = e =&gt; {
+      if(e)
+        e.preventDefault()
+      let credentials = { username: this.username.value, password: this.password.value }
+      this.props.onLoginAttempt(credentials)
+      this.password.value = &apos;&apos;
+    };
+  }
+
+
+  const HatchLower = ({ isModern, children }) =&gt; (
+    &lt;div className=&quot;hatch-animate&quot;&gt;
+      {isModern ? &lt;HatchLatch /&gt; : null}
+      &lt;div className=&quot;hatch-edge&quot; style={hatchBackgroundStyle}/&gt;
+      &lt;div className=&quot;hatch-inside&quot; style={hatchBackgroundStyle}&gt;{children}&lt;/div&gt;
+    &lt;/div&gt;
+  )
+
+
+  class Hatch extends Component {
+    constructor(props) {
+      super(props)
+      this.state =  { isAnimating: false }
+    }
+    componentWillReceiveProps(nextProps) {
+      const { isClosed, transitionDuration } = this.props
+      if(isClosed !== nextProps.isClosed) {
+        if(!this.state.isAnimating)
+          this.setState({ isAnimating: true })
+        setTimeout(() =&gt; {
+          this.setState({ isAnimating: false })
+        }, transitionDuration)
+      } else if(this.state.isAnimating)
+          this.setState({ isAnimating: false })
+    }
+    componentDidMount() {
+      const { isClosed, username, transitionDuration } = this.props
+      document.body.style.margin = 0
+      if(isClosed) {
+        if(!this.state.isAnimating)
+        this.setState({ isAnimating: true })
+        setTimeout(() =&gt; {
+          this.setState({ isAnimating: false })
+        }, transitionDuration)
+      }
+    }
+    render() {
+      let animationClasses =  { closed: this.props.isClosed === true
+                              , open: this.props.isClosed === false
+                              , animating: this.state.isAnimating
+                              , error: this.props.errors.size &gt; 0
+                              , loading: this.props.isLoading
+                              }
+      let hatchStyle = { pointerEvents: this.props.isClosed ? &apos;auto&apos; : &apos;none&apos; }
+      let hatchClass = classNames(`hatch-${this.props.theme}`, animationClasses)
+
+      return (&lt;div id=&quot;Hatch&quot; className={hatchClass} style={hatchStyle}&gt;
+          &lt;div className=&quot;hatch-upper&quot;&gt;
+            &lt;ReactCSSTransitionGroup transitionName=&quot;hatch-upper&quot; transitionEnterTimeout={this.props.transitionDuration} transitionLeaveTimeout={this.props.transitionDuration}&gt;
+              {this.props.isClosed ? &lt;HatchUpper key={0} {...this.props} isAnimating={this.state.isAnimating} /&gt; : null}
+            &lt;/ReactCSSTransitionGroup&gt;
+          &lt;/div&gt;
+          &lt;div className=&quot;hatch-lower&quot;&gt;
+            &lt;ReactCSSTransitionGroup transitionName=&quot;hatch-lower&quot;  transitionEnterTimeout={this.props.transitionDuration} transitionLeaveTimeout={this.props.transitionDuration}&gt;
+              {this.props.isClosed ? &lt;HatchLower key={0} {...this.props} /&gt; : null}
+            &lt;/ReactCSSTransitionGroup&gt;
+          &lt;/div&gt;
+          {this.props.hasToggle ? &lt;HatchToggle toggleClose={this.props.toggleClose} /&gt; : null}
+      &lt;/div&gt;)
+    }
+
+  }
+
+
+  Hatch.propTypes = { onLoginAttempt: PropTypes.func.isRequired
+                    , isClosed: PropTypes.bool.isRequired
+                    , hasToggle: PropTypes.bool.isRequired
+                    , toggleClose: PropTypes.func
+                    , hasAuthorization: PropTypes.bool.isRequired
+                    , username: PropTypes.string
+                    , title: PropTypes.string
+                    , message: PropTypes.string
+                    , errors: PropTypes.object.isRequired
+                    , isLoading: PropTypes.bool.isRequired
+                    , transitionDuration: PropTypes.number
+                    , theme: PropTypes.oneOf([&apos;shield&apos;, &apos;carbon&apos;]).isRequired
+                    , isModern: PropTypes.bool
+                    }
+  Hatch.defaultProps =  { hasToggle: false
+                        , showLogin: false
+                        , hasAuthorization: true
+                        , title: &apos;Locked&apos;
+                        , transitionDuration: 2000
+                        , theme: &apos;carbon&apos;
+                        , isLoading: false
+                        , isModern: ieVersion === -1 || ieVersion &gt; 11
+                        }
+
+
+  // Returns the version of Internet Explorer or a -1
+  // (indicating the use of another browser).
+  function getInternetExplorerVersion() {
+    var rv = -1 // Return value assumes failure.
+    if(!(window.ActiveXObject) &amp;&amp; &apos;ActiveXObject&apos; in window)
+      return 11
+    if (navigator.appName == &apos;Microsoft Internet Explorer&apos;) {
+      var ua = navigator.userAgent
+      var re  = new RegExp(&apos;MSIE ([0-9]{1,}[\.0-9]{0,})&apos;)
+      if (re.exec(ua) != null)
+        rv = parseFloat( RegExp.$1 )
+    }
+    return rv
+  }
+
+
+  return Hatch
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.6)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
