@@ -8,5 +8,5 @@ exports.getEntry = getEntry;
 var _config = require('../config.js');
 
 function getEntry(name) {
-  return { 'lib/style': './src/lib/style' };
+  return { 'lib/index': './src/lib' };
 }
