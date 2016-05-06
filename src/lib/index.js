@@ -43,8 +43,8 @@ export default dependencies => {
     <div className="hatch-animate">
       <div className="hatch-inside"  style={hatchBackgroundStyle}>
         <div className="hatch-content" style={contentStyle}>
-          {title ? <div className="hatch-title"><h1>{title}</h1></div> : null}
-          {message ? <div className="hatch-message"><p>{message}</p></div> : null}
+          {/*title ? <div className="hatch-title"><h1>{title}</h1></div> : null}
+          {message ? <div className="hatch-message"><p>{message}</p></div> : null*/}
           {children}
         </div>
       </div>
