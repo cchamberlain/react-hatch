@@ -1,6 +1,6 @@
 {
   "name": "react-hatch",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "React overlay component for transitions and lock screens.",
   "main": "lib/index.js",
   "files": [
