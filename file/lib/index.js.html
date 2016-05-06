@@ -37,8 +37,7 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">lib/index.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">//import ReactCSSTransitionGroup from &apos;react/lib/ReactCSSTransitionGroup&apos;
-import { detectBrowser } from &apos;browser-detective&apos;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { detectBrowser } from &apos;browser-detective&apos;
 import { log } from &apos;../config&apos;
 import &apos;./style&apos;
 
@@ -53,6 +52,7 @@ const validate = ({ assert, classNames, React, ReactCSSTransitionGroup }) =&gt; 
 
 export default dependencies =&gt; {
   const { assert, classNames, React, ReactCSSTransitionGroup } = dependencies
+  const { Component, PropTypes } = React
 
   /** @type {JSX} Required to stop autocomplete on chrome. */
   const ieVersion = getInternetExplorerVersion()
@@ -77,75 +77,21 @@ export default dependencies =&gt; {
     &lt;/div&gt;
   )
 
-  class HatchUpper extends Component {
-    componentDidMount() {
-      const { username } = this.props
-      if(this.username &amp;&amp; username)
-        this.username.value = username
-      if(this.password)
-        this.password.value = &apos;&apos;
-    }
-    render() {
-      const { isModern, title, message } = this.props
-      const contentStyle = { maxWidth: 800, alignSelf: &apos;center&apos; }
-
-      return (
-        &lt;div className=&quot;hatch-animate&quot;&gt;
-          &lt;div className=&quot;hatch-inside&quot;  style={hatchBackgroundStyle}&gt;
-            &lt;div className=&quot;hatch-content&quot; style={contentStyle}&gt;
-              {title ? &lt;div className=&quot;hatch-title&quot;&gt;&lt;h1&gt;{title}&lt;/h1&gt;&lt;/div&gt; : null}
-              {message ? &lt;div className=&quot;hatch-message&quot;&gt;&lt;p&gt;{message}&lt;/p&gt;&lt;/div&gt; : null}
-              {this.renderAuthorization()}
-            &lt;/div&gt;
-          &lt;/div&gt;
-          &lt;div className=&quot;hatch-edge&quot; style={hatchBackgroundStyle} /&gt;
-          {isModern ? &lt;HatchLatch /&gt; : null}
-          &lt;div className=&quot;hatch-empty&quot; /&gt;
+  const contentStyle = { maxWidth: 800, minHeight: 270, alignSelf: &apos;center&apos; }
+  const HatchUpper = ({ isModern, title, message, children }) =&gt; (
+    &lt;div className=&quot;hatch-animate&quot;&gt;
+      &lt;div className=&quot;hatch-inside&quot;  style={hatchBackgroundStyle}&gt;
+        &lt;div className=&quot;hatch-content&quot; style={contentStyle}&gt;
+          {title ? &lt;div className=&quot;hatch-title&quot;&gt;&lt;h1&gt;{title}&lt;/h1&gt;&lt;/div&gt; : null}
+          {message ? &lt;div className=&quot;hatch-message&quot;&gt;&lt;p&gt;{message}&lt;/p&gt;&lt;/div&gt; : null}
+          {children}
         &lt;/div&gt;
-      )
-    }
-    renderAuthorization = () =&gt; {
-      const { hasAuthorization, errors } = this.props
-      if(hasAuthorization) {
-        return (
-          &lt;div className=&quot;hatch-form&quot;&gt;
-            &lt;form onSubmit={e =&gt; this.onLoginAttempt(e)}&gt;
-              &lt;div className=&quot;hatch-input&quot;&gt;
-                &lt;input
-                  type=&quot;text&quot;
-                  autoComplete=&quot;off&quot;
-                  name=&quot;username&quot;
-                  placeholder=&quot;Username&quot;
-                  ref={x =&gt; this.username = x}
-                /&gt;
-              &lt;/div&gt;
-              &lt;div className=&quot;hatch-input&quot;&gt;
-                &lt;input
-                  type=&quot;password&quot;
-                  autoComplete=&quot;new-passwords&quot;
-                  name=&quot;password&quot;
-                  placeholder=&quot;Password&quot;
-                  ref={x =&gt; this.password = x}
-                /&gt;
-              &lt;/div&gt;
-              &lt;div className=&quot;hatch-input right&quot;&gt;
-                &lt;button className=&quot;hatch-btn&quot; type=&quot;submit&quot;&gt;Sign In&lt;/button&gt;
-              &lt;/div&gt;
-            &lt;/form&gt;
-            {errors ? errors.map((x, i) =&gt; &lt;span key={i} className=&quot;hatch-error&quot;&gt;{x.message}&lt;/span&gt;) : null}
-          &lt;/div&gt;
-        )
-      }
-    };
-
-    onLoginAttempt = e =&gt; {
-      if(e)
-        e.preventDefault()
-      let credentials = { username: this.username.value, password: this.password.value }
-      this.props.onLoginAttempt(credentials)
-      this.password.value = &apos;&apos;
-    };
-  }
+      &lt;/div&gt;
+      &lt;div className=&quot;hatch-edge&quot; style={hatchBackgroundStyle} /&gt;
+      {isModern ? &lt;HatchLatch /&gt; : null}
+      &lt;div className=&quot;hatch-empty&quot; /&gt;
+    &lt;/div&gt;
+  )
 
 
   const HatchLower = ({ isModern, children }) =&gt; (
@@ -174,7 +120,7 @@ export default dependencies =&gt; {
           this.setState({ isAnimating: false })
     }
     componentDidMount() {
-      const { isClosed, username, transitionDuration } = this.props
+      const { isClosed, transitionDuration } = this.props
       document.body.style.margin = 0
       if(isClosed) {
         if(!this.state.isAnimating)
@@ -185,10 +131,11 @@ export default dependencies =&gt; {
       }
     }
     render() {
+      const { isModern, footer, transitionDuration, toggleClose } = this.props
+      const { isAnimating } = this.state
       let animationClasses =  { closed: this.props.isClosed === true
                               , open: this.props.isClosed === false
-                              , animating: this.state.isAnimating
-                              , error: this.props.errors.size &gt; 0
+                              , animating: isAnimating
                               , loading: this.props.isLoading
                               }
       let hatchStyle = { pointerEvents: this.props.isClosed ? &apos;auto&apos; : &apos;none&apos; }
@@ -196,31 +143,27 @@ export default dependencies =&gt; {
 
       return (&lt;div id=&quot;Hatch&quot; className={hatchClass} style={hatchStyle}&gt;
           &lt;div className=&quot;hatch-upper&quot;&gt;
-            &lt;ReactCSSTransitionGroup transitionName=&quot;hatch-upper&quot; transitionEnterTimeout={this.props.transitionDuration} transitionLeaveTimeout={this.props.transitionDuration}&gt;
-              {this.props.isClosed ? &lt;HatchUpper key={0} {...this.props} isAnimating={this.state.isAnimating} /&gt; : null}
+            &lt;ReactCSSTransitionGroup transitionName=&quot;hatch-upper&quot; transitionEnterTimeout={transitionDuration} transitionLeaveTimeout={this.props.transitionDuration}&gt;
+              {this.props.isClosed ? &lt;HatchUpper key={0} {...this.props} isAnimating={isAnimating} /&gt; : null}
             &lt;/ReactCSSTransitionGroup&gt;
           &lt;/div&gt;
           &lt;div className=&quot;hatch-lower&quot;&gt;
-            &lt;ReactCSSTransitionGroup transitionName=&quot;hatch-lower&quot;  transitionEnterTimeout={this.props.transitionDuration} transitionLeaveTimeout={this.props.transitionDuration}&gt;
-              {this.props.isClosed ? &lt;HatchLower key={0} {...this.props} /&gt; : null}
+            &lt;ReactCSSTransitionGroup transitionName=&quot;hatch-lower&quot;  transitionEnterTimeout={transitionDuration} transitionLeaveTimeout={this.props.transitionDuration}&gt;
+              {this.props.isClosed ? &lt;HatchLower key={0} isModern={isModern} children={footer} /&gt; : null}
             &lt;/ReactCSSTransitionGroup&gt;
           &lt;/div&gt;
-          {this.props.hasToggle ? &lt;HatchToggle toggleClose={this.props.toggleClose} /&gt; : null}
+          {this.props.hasToggle ? &lt;HatchToggle toggleClose={toggleClose} /&gt; : null}
       &lt;/div&gt;)
     }
 
   }
 
 
-  Hatch.propTypes = { onLoginAttempt: PropTypes.func.isRequired
-                    , isClosed: PropTypes.bool.isRequired
+  Hatch.propTypes = { isClosed: PropTypes.bool.isRequired
                     , hasToggle: PropTypes.bool.isRequired
                     , toggleClose: PropTypes.func
-                    , hasAuthorization: PropTypes.bool.isRequired
-                    , username: PropTypes.string
                     , title: PropTypes.string
                     , message: PropTypes.string
-                    , errors: PropTypes.object.isRequired
                     , isLoading: PropTypes.bool.isRequired
                     , transitionDuration: PropTypes.number
                     , theme: PropTypes.oneOf([&apos;shield&apos;, &apos;carbon&apos;]).isRequired
@@ -228,7 +171,6 @@ export default dependencies =&gt; {
                     }
   Hatch.defaultProps =  { hasToggle: false
                         , showLogin: false
-                        , hasAuthorization: true
                         , title: &apos;Locked&apos;
                         , transitionDuration: 2000
                         , theme: &apos;carbon&apos;
