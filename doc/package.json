@@ -1,6 +1,6 @@
 {
   "name": "react-hatch",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "React overlay component for transitions and lock screens.",
   "main": "lib/index.js",
   "files": [
@@ -12,6 +12,8 @@
     "build-deps": "babel src/webpack -d webpack && babel src/webpack.config.js -o webpack.config.js && babel src/config.js -o config.js",
     "prebuild": "npm-run-all clean build-deps",
     "build": "webpack --config webpack.config.js --progress --profile --colors",
+    "prestart": "npm-run-all clean build-deps",
+    "start": "webpack --config webpack.config.js --progress --profile --colors --watch",
     "predoc": "rimraf doc",
     "doc": "esdoc -c ./esdoc.json",
     "postdoc": "ncp CNAME doc/CNAME",
