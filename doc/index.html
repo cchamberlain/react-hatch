@@ -40,7 +40,65 @@
 <p><a href="https://nodei.co/npm/react-hatch/"><img src="https://nodei.co/npm/react-hatch.png?stars=true&amp;downloads=true" alt="NPM"></a></p>
 <p>React overlay component for transitions and lock screens.</p>
 <p><code>npm i -S react-hatch</code></p>
-<p><strong>This project is working but its interface may change rapidly prior to version 1.0.  Documentation coming soon.</strong></p>
+<p><strong>This project is working but its interface may change rapidly prior to version 1.0.</strong></p>
+<h3 id="what-s-it-do-">What&apos;s it do?</h3>
+<p>Exports a component that can be used in lock screens or page transitions.</p>
+<h3 id="usage">Usage</h3>
+<pre><code class="lang-js"><code class="source-code prettyprint">/** Import reactHatch factory */
+import reactHatch from &apos;react-hatch&apos;
+
+import React from &apos;react&apos;
+import ReactCSSTransitionGroup from &apos;react/lib/ReactCSSTransitionGroup&apos;
+import classNames from &apos;classnames&apos;
+import { assert } from &apos;chai&apos;
+
+/** Translate the factory to a Hatch, ensures you don&apos;t accidentally bundle two versions of popular libraries. */
+const Hatch = reactHatch({ React, ReactCSSTransitionGroup, classNames, assert })
+
+/** Wrap Hatch with one of your components to control when it opens and shuts. */
+export default class MyComponent extends Component (
+  constructor(props) {
+    super(props)
+    this.state = { isClosed: false }
+  }
+  render() {
+    return (
+      &lt;Hatch 
+          isClosed={this.state.isClosed}
+          theme=&quot;carbon&quot;
+          title={`the hatch is ${this.state.isClosed ? &apos;closed&apos; : &apos;open&apos;}`}
+          message=&quot;This is the hatch, forms and other things can be my children.&quot;
+      /&gt;
+    )
+  }
+  componentDidMount() {
+    window.setInterval(() =&gt; this.setState({ isClosed: !this.state.isClosed }), 2000)
+  }
+)</code>
+</code></pre>
+<h3 id="proptypes-and-defaultprops">PropTypes and DefaultProps</h3>
+<pre><code class="lang-js"><code class="source-code prettyprint">Hatch.propTypes = { isClosed: PropTypes.bool.isRequired
+                  , hasToggle: PropTypes.bool.isRequired
+                  , toggleClose: PropTypes.func
+                  , hasAuthorization: PropTypes.bool.isRequired
+                  , title: PropTypes.string
+                  , message: PropTypes.string
+                  , errors: PropTypes.object.isRequired
+                  , isLoading: PropTypes.bool.isRequired
+                  , transitionDuration: PropTypes.number
+                  , theme: PropTypes.oneOf([&apos;shield&apos;, &apos;carbon&apos;]).isRequired
+                  }</code>
+</code></pre>
+<pre><code class="lang-js"><code class="source-code prettyprint">Hatch.defaultProps =  { hasToggle: false
+                      , showLogin: false
+                      , hasAuthorization: true
+                      , title: &apos;Locked&apos;
+                      , transitionDuration: 2000
+                      , theme: &apos;carbon&apos;
+                      , isLoading: false
+                      , isModern: ieVersion === -1 || ieVersion &gt; 11
+                      }</code>
+</code></pre>
 </div>
 </div>
 

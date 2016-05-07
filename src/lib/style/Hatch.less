@@ -218,8 +218,10 @@
     background-repeat:repeat;
     background-size: auto;
     .hatch-content {
-      margin: 5% auto;
-      padding:20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: auto;
       text-shadow: 1px 1px 1px #888;
       box-shadow: inset 1px 1px 10px #000;
       border:1px solid rgba(80,80,80,0.9);
@@ -231,15 +233,6 @@
   }
 }
 
-.hatch-error {
-  background-color:@red;
-  border:2px solid @red;
-  color:#fff;
-  margin:5px;
-  padding:5px 15px;
-  border-radius:5px;
-  z-index:999999999;
-}
 
 .hatch-upper-enter {
   transform: translateY(-100%) !important;
