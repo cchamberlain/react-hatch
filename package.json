@@ -39,6 +39,7 @@
   "dependencies": {
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "browser-detective": "*",
+    "bunyan": "^1.8.1",
     "mkdirp": "^0.5.1",
     "ncp": "^2.0.0",
     "npm-run-all": "^1.8.0",

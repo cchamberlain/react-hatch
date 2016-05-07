@@ -1,5 +1,7 @@
 /lib/
 /webpack/
+/config.js
+/webpack.config.js
 
 # Logs
 logs
