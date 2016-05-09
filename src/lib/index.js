@@ -16,7 +16,6 @@ export default dependencies => {
   const { Component, PropTypes } = React
 
   /** @type {JSX} Required to stop autocomplete on chrome. */
-  const ieVersion = getInternetExplorerVersion()
 
   const hatchBackgroundStyle = { backgroundColor: '#bbb' }
 
@@ -39,7 +38,7 @@ export default dependencies => {
   )
 
   const contentStyle = { maxWidth: 800, minHeight: 270, alignSelf: 'center' }
-  const HatchUpper = ({ isModern, title, message, children }) => (
+  const HatchUpper = ({ title, message, children }) => (
     <div className="hatch-animate">
       <div className="hatch-inside"  style={hatchBackgroundStyle}>
         <div className="hatch-content" style={contentStyle}>
@@ -49,15 +48,15 @@ export default dependencies => {
         </div>
       </div>
       <div className="hatch-edge" style={hatchBackgroundStyle} />
-      {isModern ? <HatchLatch /> : null}
+      <HatchLatch />
       <div className="hatch-empty" />
     </div>
   )
 
 
-  const HatchLower = ({ isModern, children }) => (
+  const HatchLower = ({ children }) => (
     <div className="hatch-animate">
-      {isModern ? <HatchLatch /> : null}
+      <HatchLatch />
       <div className="hatch-edge" style={hatchBackgroundStyle}/>
       <div className="hatch-inside" style={hatchBackgroundStyle}>{children}</div>
     </div>
@@ -92,7 +91,7 @@ export default dependencies => {
       }
     }
     render() {
-      const { isModern, footer, transitionDuration, toggleClose } = this.props
+      const { footer, transitionDuration, toggleClose } = this.props
       const { isAnimating } = this.state
       let animationClasses =  { closed: this.props.isClosed === true
                               , open: this.props.isClosed === false
@@ -110,7 +109,7 @@ export default dependencies => {
           </div>
           <div className="hatch-lower">
             <ReactCSSTransitionGroup transitionName="hatch-lower"  transitionEnterTimeout={transitionDuration} transitionLeaveTimeout={this.props.transitionDuration}>
-              {this.props.isClosed ? <HatchLower key={0} isModern={isModern} children={footer} /> : null}
+              {this.props.isClosed ? <HatchLower key={0} children={footer} /> : null}
             </ReactCSSTransitionGroup>
           </div>
           {this.props.hasToggle ? <HatchToggle toggleClose={toggleClose} /> : null}
@@ -128,7 +127,6 @@ export default dependencies => {
                     , isLoading: PropTypes.bool.isRequired
                     , transitionDuration: PropTypes.number
                     , theme: PropTypes.oneOf(['shield', 'carbon']).isRequired
-                    , isModern: PropTypes.bool
                     }
   Hatch.defaultProps =  { hasToggle: false
                         , showLogin: false
@@ -136,25 +134,6 @@ export default dependencies => {
                         , transitionDuration: 2000
                         , theme: 'carbon'
                         , isLoading: false
-                        , isModern: ieVersion === -1 || ieVersion > 11
                         }
-
-
-  // Returns the version of Internet Explorer or a -1
-  // (indicating the use of another browser).
-  function getInternetExplorerVersion() {
-    var rv = -1 // Return value assumes failure.
-    if(!(window.ActiveXObject) && 'ActiveXObject' in window)
-      return 11
-    if (navigator.appName == 'Microsoft Internet Explorer') {
-      var ua = navigator.userAgent
-      var re  = new RegExp('MSIE ([0-9]{1,}[\.0-9]{0,})')
-      if (re.exec(ua) != null)
-        rv = parseFloat( RegExp.$1 )
-    }
-    return rv
-  }
-
-
   return Hatch
 }
