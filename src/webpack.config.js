@@ -1,3 +1,3 @@
 import 'babel-polyfill'
 import make from './webpack/make'
-export default make('style')
+export default make('lib')

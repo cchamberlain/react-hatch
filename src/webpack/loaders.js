@@ -28,15 +28,15 @@ const inlineStyleLoader = preLoaders => `style!${preLoaders}`
 
 export const getStyleLoaders = name => {
   const useExtract = process.env.NODE_ENV !== 'hot'
-  const cssLoader = `css${useExtract ? '?sourceMap' : ''}!postcss`
-  const lessLoader = `${cssLoader}!less${useExtract ? '?sourceMap' : ''}`
+  const cssLoader = 'css!postcss'
+  const lessLoader = `${cssLoader}!less`
   return  [ { test: /\.css$/, loader: /* useExtract ? extractText(cssLoader) : */ inlineStyleLoader(cssLoader) }
           , { test: /\.less$/, loader: /* useExtract ? extractText(lessLoader) : */ inlineStyleLoader(lessLoader) }
           ]
 }
 
 export const getJsxLoader = name => {
-  return  { test: /\.jsx?$/
+  return  { test: /\.js?$/
           , loaders: [ 'babel' ]
           , exclude:  [ /node_modules/ ]
           }

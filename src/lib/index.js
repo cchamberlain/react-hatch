@@ -1,6 +1,4 @@
-import { detectBrowser } from 'browser-detective'
 import { log } from '../config'
-import './style'
 
 const validate = ({ assert, classNames, React, ReactCSSTransitionGroup }) => {
   if(!assert)
@@ -11,13 +9,12 @@ const validate = ({ assert, classNames, React, ReactCSSTransitionGroup }) => {
   return { assert, classNames, React, ReactCSSTransitionGroup }
 }
 
-export default dependencies => {
-  const { assert, classNames, React, ReactCSSTransitionGroup } = dependencies
+export default deps => {
+  const { assert, classNames, React, ReactCSSTransitionGroup } = deps
   const { Component, PropTypes } = React
 
-  /** @type {JSX} Required to stop autocomplete on chrome. */
-
   const hatchBackgroundStyle = { backgroundColor: '#bbb' }
+  const contentStyle = { maxWidth: 800, minHeight: 270, alignSelf: 'center' }
 
   const HatchLatch = props => (
     <span>
@@ -37,7 +34,6 @@ export default dependencies => {
     </div>
   )
 
-  const contentStyle = { maxWidth: 800, minHeight: 270, alignSelf: 'center' }
   const HatchUpper = ({ title, message, children }) => (
     <div className="hatch-animate">
       <div className="hatch-inside"  style={hatchBackgroundStyle}>
@@ -53,7 +49,6 @@ export default dependencies => {
     </div>
   )
 
-
   const HatchLower = ({ children }) => (
     <div className="hatch-animate">
       <HatchLatch />
@@ -61,7 +56,6 @@ export default dependencies => {
       <div className="hatch-inside" style={hatchBackgroundStyle}>{children}</div>
     </div>
   )
-
 
   class Hatch extends Component {
     constructor(props) {
@@ -80,8 +74,8 @@ export default dependencies => {
           this.setState({ isAnimating: false })
     }
     componentDidMount() {
+      require('./style')
       const { isClosed, transitionDuration } = this.props
-      document.body.style.margin = 0
       if(isClosed) {
         if(!this.state.isAnimating)
         this.setState({ isAnimating: true })
