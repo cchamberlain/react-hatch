@@ -1,4 +1,5 @@
 import { log } from '../config'
+import PropTypes from 'prop-types'
 
 const validate = ({ assert, classNames, React, ReactCSSTransitionGroup }) => {
   if(!assert)
@@ -11,7 +12,7 @@ const validate = ({ assert, classNames, React, ReactCSSTransitionGroup }) => {
 
 export default deps => {
   const { assert, classNames, React, ReactCSSTransitionGroup } = deps
-  const { Component, PropTypes } = React
+  const { Component } = React
 
   const hatchBackgroundStyle = { backgroundColor: '#bbb' }
   const contentStyle = { maxWidth: 800, minHeight: 270, alignSelf: 'center' }
@@ -109,7 +110,6 @@ export default deps => {
           {this.props.hasToggle ? <HatchToggle toggleClose={toggleClose} /> : null}
       </div>)
     }
-
   }
 
 

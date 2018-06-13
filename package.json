@@ -43,6 +43,7 @@
     "mkdirp": "^0.5.1",
     "ncp": "^2.0.0",
     "npm-run-all": "^1.8.0",
+    "prop-types": "^15.6.1",
     "redux-devtools-themes": "^1.0.0",
     "webpack": "^1.13.0"
   },
